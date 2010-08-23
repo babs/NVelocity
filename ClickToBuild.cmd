@@ -14,8 +14,18 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
-IF "%1" == "" (SET Framework=NET40) ELSE (SET Framework=%1)
-IF "%2" == "" (SET Target=RunAllTests) ELSE (SET Target=%2)
-IF "%3" == "" (SET Configuration=Release) ELSE (SET Configuration=%3)
+ECHO This script builds the project in Release configuration
 
-@call buildscripts\build.cmd %Framework% %Target% %Configuration%
+SET CLICKTOBUILD=1
+CALL buildscripts\build.cmd
+SET CLICKTOBUILD=
+
+IF %ERRORLEVEL% NEQ 0 GOTO err
+ECHO **************************************************************
+ECHO The binaries can be found in the following folder:
+ECHO %__OUTDIR__%
+ECHO **************************************************************
+
+:err
+PAUSE
+@EXIT /B %ERRORLEVEL%
